@@ -143,3 +143,28 @@ Route::get('limiter', function () {
 
     return view('success');
 });
+
+// HTTP client
+Route::get('http-client', function () {
+
+    $response  = \Illuminate\Support\Facades\Http::withoutVerifying()->get('https://www.baidu.com/');
+
+    dd($response->headers());
+
+
+//    $response->body() : string;
+//    $response->json() : array|mixed;
+//    $response->collect() : Illuminate\Support\Collection;
+//    $response->status() : int;
+//    $response->ok() : bool;
+//    $response->successful() : bool;
+//    $response->failed() : bool;
+//    $response->serverError() : bool;
+//    $response->clientError() : bool;
+//    $response->header($header) : string;
+//    $response->headers() : array;
+
+
+
+
+});

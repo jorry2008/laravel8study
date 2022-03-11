@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Mail;
 
 class TestQueueController extends Controller
 {
+    public $middleware = [''];
+
     public function testEmail()
     {
         // 创建 markdown 邮件的方式：php artisan make:mail TestMail --markdown=emails.test_mail
