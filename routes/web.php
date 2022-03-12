@@ -147,22 +147,23 @@ Route::get('limiter', function () {
 // HTTP client
 Route::get('http-client', function () {
 
-    $response  = \Illuminate\Support\Facades\Http::withoutVerifying()->get('https://www.baidu.com/');
+    $response  = \Illuminate\Support\Facades\Http::get('http://laravel8study.cc/echo');
 
-    dd($response->headers());
+    // 1.输出内容
+//    $response->body() // string;
+//    $response->json() // array|mixed;
+//    $response->collect() // Illuminate\Support\Collection;
+//    $response->status() // int;
+//    $response->ok() // bool;
+//    $response->successful() // bool;
+//    $response->failed() // bool;
+//    $response->serverError() // bool;
+//    $response->clientError() // bool;
+//    $response->header('X-RateLimit-Remaining') // string;
+//    $response->headers() // array;
 
-
-//    $response->body() : string;
-//    $response->json() : array|mixed;
-//    $response->collect() : Illuminate\Support\Collection;
-//    $response->status() : int;
-//    $response->ok() : bool;
-//    $response->successful() : bool;
-//    $response->failed() : bool;
-//    $response->serverError() : bool;
-//    $response->clientError() : bool;
-//    $response->header($header) : string;
-//    $response->headers() : array;
+    // 2.验证相关
+    \Illuminate\Support\Facades\Http::withoutVerifying();
 
 
 
