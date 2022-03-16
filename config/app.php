@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'mix_url' => env('MIX_ASSET_URL', null), // 引入前端资源 cdn 化
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -1,5 +1,5 @@
 {
-	"authHost": "http://laravel8.cc",
+	"authHost": "http://laravel8study.cc",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",
@@ -27,7 +27,7 @@
 	},
     "apiOriginAllow": {
         "allowCors": true,
-        "allowOrigin": "laravel8.cc",
+        "allowOrigin": "laravel8study.cc",
         "allowMethods": "GET, POST",
         "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
     }

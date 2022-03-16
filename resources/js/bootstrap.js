@@ -34,18 +34,3 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     broadcaster: 'socket.io',
 //     host: window.location.hostname + ':6001'
 // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
