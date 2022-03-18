@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Http;
 */
 
 
-Route::get('/', function () {
+Route::get('/', function (\Illuminate\Http\Response $response) {
 
     if ($user = Auth::user()) {
 //        UserTestEvent::dispatch($user);
@@ -241,38 +241,15 @@ Route::get('http-client', function () {
 //    Http::assertNotSent(function (\Illuminate\Http\Client\Request $request) {
 //        return $request->url() === 'http://example.com/posts'; // 错误，则对，断言
 //    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
 
 
 // Mix测试
 Route::get('mix', function () {
     return view('mix');
+});
+
+// tailwindcss 测试
+Route::get('tailwind', function () {
+    return view('tailwind');
 });
