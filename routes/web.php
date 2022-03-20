@@ -253,3 +253,7 @@ Route::get('mix', function () {
 Route::get('tailwind', function () {
     return view('tailwind');
 });
+
+Route::get('tailwind/login', function () {
+    return view('test_layout.login');
+});
