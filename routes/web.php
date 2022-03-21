@@ -257,3 +257,37 @@ Route::get('tailwind', function () {
 Route::get('tailwind/login', function () {
     return view('test_layout.login');
 });
+
+// PHPUnit 测试用例
+Route::post('test/user', function (\App\Http\Requests\UserRequest $request) {
+    // 参数校验
+    $request->validated();
+    return $request->hasHeader('X-Header') ? response('test phpunit user'): response('has error', 501);
+});
+
+Route::get('test/cookie', function (\Illuminate\Http\Request $request) {
+//    dd($request->cookies);
+    $color = $request->cookie('color');
+    $name = $request->cookie('name');
+
+    return response('test phpunit cookie')->withCookie(cookie('color', $color))->withCookie(cookie('name', $name));
+});
+
+Route::post('test/json', function (\Illuminate\Http\Request $request) {
+    return response([
+        'team' => [
+            'owner' => [
+                'name' => 'Darian'
+            ]
+        ]
+    ], 201);
+});
+
+Route::get('test/file', function () {
+    return view('test_file', ['name' => 'test']);
+});
+Route::post('test/file', function (\Illuminate\Http\Request $request) {
+    $path = $request->file('test_file')->store('avatars'); // 默认存储在了 public 驱动
+
+    return $path;
+});

@@ -16,6 +16,11 @@
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
 
+<!--        自定义 Jorry 测试套件-->
+        <testsuite name="Jorry">
+            <directory suffix="Test.php">./tests/Jorry</directory>
+        </testsuite>
+
     </testsuites>
 
     <coverage processUncoveredFiles="true">
@@ -34,6 +39,9 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
+
+<!--        这里有一个严重的问题，没有配置以下参数时，文件存在驱动默认使用了local-->
+        <server name="FILESYSTEM_DRIVER" value="public"/>
 
     </php>
 </phpunit>
