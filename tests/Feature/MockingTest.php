@@ -8,6 +8,8 @@ use Tests\TestCase;
 
 class MockingTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *

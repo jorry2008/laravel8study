@@ -55,16 +55,20 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class, // 同类型的还有 web 认证、jwt 认证
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
+        // 绝对地址的签名 hash_hmac 认证（调用第三方支付时，需要这种验证需求，牛牛，，，，）
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         // 强制使用 redis 限流
 //        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+
+        // 强制当前使用的用户邮箱必须验证，否则显示提示信息，并跳转到验证页面
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 }

@@ -8,12 +8,14 @@ use Tests\TestCase;
 
 class DuskTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_example()
+    public function test_dusk_test_empty()
     {
         $response = $this->get('/');
 

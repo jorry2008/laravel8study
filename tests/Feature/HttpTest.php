@@ -2,14 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class HttpTest extends TestCase
 {
+    use RefreshDatabase;
+
     // 就是测试一个链接在某条件下是否正常访问
     public function test_user_with_x_header_post_and_name()
     {
@@ -20,7 +25,10 @@ class HttpTest extends TestCase
         $response->assertStatus(200); // 响应为 TestResponse 对象
     }
 
-    // 就是测试cookie是否可用
+    /**
+     *  就是测试cookie是否可用
+     * @group example // 这里是分组！！！！不需要在 xml 中操作
+     */
     public function test_cookie_with_name_color()
     {
         $response = $this->withCookie('color', 'blue')->get('test/cookie');
@@ -42,8 +50,21 @@ class HttpTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJsonPath('team.owner.name', 'Darian')
-            ->assertJson();
+            ->assertJsonPath('team.owner.name', 'Darian');
+
+        // 只能说，太牛批了，直接从响应内容反推使用的是什么视图
+//        $response->assertViewHas($key, $value = null);
+//        $response->assertViewMissing($key); // 断言视图缺少指定的键
+//        $response->assertViewIs($value); // 断言当前路由返回的的视图是给定的视图
+//        $response->assertViewHasAll([
+//            'name',
+//            'email',
+//        ]);
+//        $response->assertViewHasAll([
+//            'name' => 'Taylor Otwell',
+//            'email' => 'taylor@example.com,',
+//        ]);
+
     }
 
     // 就是测试基于 http 的文件上传：测试指定上传驱动是否可用，还测试指定上传路径是否正确
@@ -83,8 +104,9 @@ class HttpTest extends TestCase
     }
 
     // 以下是几个文本检测，只是场景不同
-    public function test_render_view_with_errors()
-    {
+//    public function test_render_view_with_errors()
+//    {
+        /*
         // 共享错误
         $view = $this->withViewErrors([
             'name' => ['Please provide a valid name.'] // 此 name 将会触发模板中的错误提示，进而将提示文本写入到模板文本
@@ -104,15 +126,29 @@ class HttpTest extends TestCase
         $view = $this->component(Profile::class, ['name' => 'Taylor']);
 
         $view->assertSee('Taylor');
+        */
+//    }
 
+    public function test_登录身份验证测试()
+    {
+        $this->assertGuest(); // 当前为游客
 
+        $user = User::factory()->create(); // 在测试代码中操作数据库没有太多意义！！！
 
+        // 登录操作
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]); // 整个请求会基于 cookie 自动处于验证状态，所以下面的所有身份认证相关的方法，直接使用就可以了，不需要 $response
+        $this->assertAuthenticated(); // 已经登录
+        $this->assertAuthenticatedAs($user); // 或直接指定user
 
+//        Log::info($response->headers);
+//        Log::info($response->content());
+        // 断言，response 是否跳转到指定位置
+        $response->assertRedirect(RouteServiceProvider::HOME); // http://laravel8study.cc/dashboard
 
-
-
-
+//        $response->assertSuccessful(); // 断言响应一个成功的状态码 (>= 200 且 < 300)
+//        $response->assertUnauthorized();// 断言一个未认证的状态码 (401)
     }
-
-
 }

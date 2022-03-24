@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\TestMail;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class TestQueueController extends Controller
