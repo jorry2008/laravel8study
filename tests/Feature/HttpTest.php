@@ -42,7 +42,8 @@ class HttpTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJsonPath('team.owner.name', 'Darian');
+            ->assertJsonPath('team.owner.name', 'Darian')
+            ->assertJson();
     }
 
     // 就是测试基于 http 的文件上传：测试指定上传驱动是否可用，还测试指定上传路径是否正确
@@ -64,7 +65,7 @@ class HttpTest extends TestCase
         Storage::disk('public')->assertExists('avatars/' . $file->hashName()); // 使用 Storage 直接检测文件是否存在，这也太牛了吧
     }
 
-    // xxxxxxxxxx
+    // 就是测试文本文档中指定的字符串是否符合要求，包含要求、排序要求、转义要求
     public function test_view_template_can_be_rendered()
     {
         $view = $this->view('test_file', ['name' => '<h3>Taylor</h3>']); // 值会被转义
@@ -81,13 +82,28 @@ class HttpTest extends TestCase
         // 因此，断言是成体系的独立的一个概念，与 Laravel 框架没有关系，只是框架中的某些组件实现了而已，注意，断言是需要自己实现的，退一万步，断言更像一种测试规则或标准。
     }
 
-
-
-
-
-
-
-
-
-
+    // 以下是几个文本检测，只是场景不同
+//    public function test_render_view_with_errors()
+//    {
+//        // 共享错误
+//        $view = $this->withViewErrors([
+//            'name' => ['Please provide a valid name.'] // 此 name 将会触发模板中的错误提示，进而将提示文本写入到模板文本
+//        ])->view('form');
+//
+//        $view->assertSee('Please provide a valid name.');
+//
+//        // 渲染模板 & 组件
+//        $view = $this->blade(
+//            '<x-component :name="$name" />', // 直接调用组件
+//            ['name' => 'Taylor']
+//        );
+//
+//        $view->assertSee('Taylor');
+//
+//        // 组件2
+//        $view = $this->component(Profile::class, ['name' => 'Taylor']);
+//
+//        $view->assertSee('Taylor');
+//
+//    }
 }
