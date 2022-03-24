@@ -151,4 +151,25 @@ class HttpTest extends TestCase
 //        $response->assertSuccessful(); // 断言响应一个成功的状态码 (>= 200 且 < 300)
 //        $response->assertUnauthorized();// 断言一个未认证的状态码 (401)
     }
+//        // 共享错误
+//        $view = $this->withViewErrors([
+//            'name' => ['Please provide a valid name.'] // 此 name 将会触发模板中的错误提示，进而将提示文本写入到模板文本
+//        ])->view('form');
+//
+//        $view->assertSee('Please provide a valid name.');
+//
+//        // 渲染模板 & 组件
+//        $view = $this->blade(
+//            '<x-component :name="$name" />', // 直接调用组件
+//            ['name' => 'Taylor']
+//        );
+//
+//        $view->assertSee('Taylor');
+//
+//        // 组件2
+//        $view = $this->component(Profile::class, ['name' => 'Taylor']);
+//
+//        $view->assertSee('Taylor');
+//
+//    }
 }
