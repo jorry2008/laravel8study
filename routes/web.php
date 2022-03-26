@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\UserTestEvent;
 use App\Events\UserBroadcastTestEvent;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,7 +148,7 @@ Route::get('limiter', function () {
 // HTTP client
 Route::get('http-client', function () {
 
-    $response  = \Illuminate\Support\Facades\Http::get('http://laravel8study.cc/echo');
+    $response  = Http::get('http://laravel8study.cc/echo');
 
     // 1.输出内容
 //    $response->body() // string;
@@ -162,10 +163,15 @@ Route::get('http-client', function () {
 //    $response->header('X-RateLimit-Remaining') // string;
 //    $response->headers() // array;
 
+    Http::withOptions([
+        'debug' => true,
+    ])->get('');
+
     // 2.验证相关
-    \Illuminate\Support\Facades\Http::withoutVerifying();
-
-
 
 
 });
+
+
+
+
