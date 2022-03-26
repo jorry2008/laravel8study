@@ -16,6 +16,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+
 // import Echo from 'laravel-echo';
 //
 // window.Pusher = require('pusher-js');
@@ -34,18 +37,3 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     broadcaster: 'socket.io',
 //     host: window.location.hostname + ':6001'
 // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

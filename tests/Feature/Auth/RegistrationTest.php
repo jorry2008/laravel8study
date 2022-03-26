@@ -10,14 +10,17 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_registration_screen_can_be_rendered()
+    /**
+     * @group 分个组
+     */
+    public function test_断言注册表单页可访问()
     {
         $response = $this->get('/register');
 
         $response->assertStatus(200);
     }
 
-    public function test_new_users_can_register()
+    public function test_断言注册表单提交并登录后跳转()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -26,6 +29,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
+        // 注册完成登录，并跳转
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
     }

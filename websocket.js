@@ -1,7 +1,9 @@
+// 基于 redis 订阅功能实现的 websocket 服务，阐明 broadcast 原理
+
 var server = require('http').Server();
 var io = require('socket.io')(server, {
     cors: {
-        origin: "http://laravel8.cc", // 跨域
+        origin: "http://laravel8study.cc", // 跨域
         methods: ["GET", "POST"]
     }
 });

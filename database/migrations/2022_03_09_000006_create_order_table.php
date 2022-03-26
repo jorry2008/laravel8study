@@ -13,12 +13,13 @@ class CreateOrderTable extends Migration
      */
     public function up()
     {
-        Schema::create('order', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->index();
             $table->integer('user_id')->unsigned()->default(0);
-            $table->unsignedInteger('updated_at');
-            $table->unsignedInteger('created_at');
+            $table->string('test', 255);
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
+            $table->timestamp('created_at');
         });
     }
 

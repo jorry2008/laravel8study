@@ -6,6 +6,7 @@ use App\Events\UserTestEvent;
 use App\Events\UserBroadcastTestEvent;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Cache\RateLimiter;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Http;
 */
 
 
-Route::get('/', function () {
+Route::get('/', function (\Illuminate\Http\Response $response) {
 
     if ($user = Auth::user()) {
 //        UserTestEvent::dispatch($user);
@@ -149,8 +150,10 @@ Route::get('limiter', function () {
 Route::get('http-client', function () {
 
     $response  = Http::get('http://laravel8study.cc/echo');
+    // 具体使用请参考手册，这里只说重点
 
     // 1.输出内容
+//    $response = \Illuminate\Support\Facades\Http::get('http://laravel8study.cc/echo');
 //    $response->body() // string;
 //    $response->json() // array|mixed;
 //    $response->collect() // Illuminate\Support\Collection;
@@ -162,14 +165,137 @@ Route::get('http-client', function () {
 //    $response->clientError() // bool;
 //    $response->header('X-RateLimit-Remaining') // string;
 //    $response->headers() // array;
+    // 请求数据、请求头、认证、超时、重试、错误处理
 
     Http::withOptions([
         'debug' => true,
     ])->get('');
 
     // 2.验证相关
+    // 直接访问 https 时，可以手动设置路过，也可以手动添加 pem 证书
+    // 证书下载地址：https://curl.se/docs/caextract.html    https://curl.se/ca/cacert.pem
+//    $response = Http::withOptions([
+//        'verify' => resource_path('ca/cacert.pem'),
+////        'debug' => true,
+//    ])->get('https://baidu.com/');
+
+//    dd($response->headers());
+
+    // 3.模拟测试【这是在laravel中最重要的特性】
+    // 使用流程是：先 fake() 模拟，再实测，最后看结果。
+    // 重点：它不需要走正式的外网就可以完成模拟测试，就是预先给定结果再执行“请求”的意思。
+
+    // 模拟响应
+//    Http::fake();
+//    $response = Http::withoutVerifying()->get('https://baidu.com/');
+//    dd($response->headers());
+
+    // 模拟指定地址的响应
+//    Http::fake([
+//        'github.com/*' => Http::response(['foo' => 'bar'], 200, ['Headers']),
+//        'baidu.com/*' => Http::response('Hello World', 200, ['这是响应200的结果....']),
+//    ]);
+//    // 前面有 fake() 已执行，此时不需要真正访问网络，非常有利于在保证响应正确的情况下进一步完成响应测试
+//    $response = Http::withoutVerifying()->get('https://baidu.com/');
+//    $response = Http::withoutVerifying()->get('https://github.com/');
+//    dd($response->headers(), $response->body());
+
+    // 伪造响应队列
+//    Http::fake([
+//        // 模拟发往 github.com 的请求的一系列响应
+//        'github.com/*' => Http::sequence()
+//            ->push('Hello World', 200)
+//            ->push(['foo' => 'bar'], 200)
+//            ->pushStatus(404),
+//    ]);
+//    $response = Http::withoutVerifying()->get('https://github.com/'); // 当前返回第一个push
+//    var_dump($response->headers());
+//    var_dump($response->body());
+//    echo '<br />';
+//    $response = Http::withoutVerifying()->get('https://github.com/'); // 当前返回第二个push
+//    var_dump($response->headers());
+//    var_dump($response->body());
+//    echo '<br />';
+//    $response = Http::withoutVerifying()->get('https://github.com/'); // 当前返回第三个push
+//    var_dump($response->headers());
+//    var_dump($response->body());
+
+    // 模拟回调
+//    Http::fake(function ($request) {
+//         return Http::response('当请求完成后，会执行这个操作', 200);
+//    });
+//    $response = Http::withOptions([
+//        'verify' => resource_path('ca/cacert.pem'),
+//    ])->get('https://github.com/');
+//    var_dump($response->headers());
+//    var_dump($response->body());
+
+    // 注入请求，进一步检查响应的正确性
+//    Http::fake();
+//    Http::withHeaders([
+//        'X-First' => 'foo',
+//    ])->post('http://example.com/users', [
+//        'name' => 'Taylor',
+//        'role' => 'Developer',
+//    ]);
+//    Http::assertSent(function (\Illuminate\Http\Client\Request $request) {
+//        return $request->hasHeader('X-First', 'foo') &&
+//            $request->url() == 'http://example.com/users' &&
+//            $request['name'] == 'Taylor' &&
+//            $request['role'] == 'Developer';
+//    });
+//    Http::assertNotSent(function (\Illuminate\Http\Client\Request $request) {
+//        return $request->url() === 'http://example.com/posts'; // 错误，则对，断言
+//    });
+});
 
 
+// Mix测试
+Route::get('mix', function () {
+    return view('mix');
+});
+
+// tailwindcss 测试
+Route::get('tailwind', function () {
+    return view('tailwind');
+});
+
+Route::get('tailwind/login', function () {
+    return view('test_layout.login');
+});
+
+// PHPUnit 测试用例
+Route::post('test/user', function (\App\Http\Requests\UserRequest $request) {
+    // 参数校验
+    $request->validated();
+    return $request->hasHeader('X-Header') ? response('test phpunit user'): response('has error', 501);
+});
+
+Route::get('test/cookie', function (\Illuminate\Http\Request $request) {
+//    dd($request->cookies);
+    $color = $request->cookie('color');
+    $name = $request->cookie('name');
+
+    return response('test phpunit cookie')->withCookie(cookie('color', $color))->withCookie(cookie('name', $name));
+});
+
+Route::post('test/json', function (\Illuminate\Http\Request $request) {
+    return response([
+        'team' => [
+            'owner' => [
+                'name' => 'Darian'
+            ]
+        ]
+    ], 201);
+});
+
+Route::get('test/file', function () {
+    return view('test_file', ['name' => 'test']);
+});
+Route::post('test/file', function (\Illuminate\Http\Request $request) {
+    $path = $request->file('test_file')->store('avatars'); // 默认存储在了 public 驱动
+
+    return $path;
 });
 
 
