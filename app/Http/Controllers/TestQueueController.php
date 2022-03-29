@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class TestQueueController extends Controller
 {
-    public $middleware = [''];
+//    public $middleware = [''];
 
     public function testEmail()
     {

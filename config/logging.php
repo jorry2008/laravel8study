@@ -67,6 +67,7 @@ return [
             'days' => 14,
         ],
 
+        // https://slack.com/intl/zh-cn/pricing
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

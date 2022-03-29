@@ -48,7 +48,6 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-
 // 公有频道
 Route::get('/push/{message}', function ($message) {
     broadcast(new \App\Events\PublicMessageEvent($message));
@@ -114,12 +113,12 @@ Route::get('notify', function () {
     return view('success');
 });
 
-
 // 发送邮件
 Route::get('test/mail', ['App\Http\Controllers\TestQueueController', 'testEmail']);
 Route::get('/mailable', function () { // 预览功能极其重要
     return new \App\Mail\TestMail();
 });
+
 Route::get('/notification-mailable', function () { // 预览消息通知默认的邮件信息类
     return (new \Illuminate\Notifications\Messages\MailMessage())
         ->subject('新用户注册')
@@ -291,3 +290,19 @@ Route::post('test/file', function (\Illuminate\Http\Request $request) {
 
     return $path;
 });
+
+
+
+// 不需要方法的，单个行为控制器，不需要指定控制器方法，全局就一个方法
+Route::get('user_profile/{id}', \App\Http\Controllers\ShowProfileController::class);
+
+// 单个资源返回
+Route::get('user/profile', function () {
+   if (Auth::guest()) {
+       dd('当前未登录');
+   } else {
+       return new \App\Http\Resources\UserResource(Auth::user());
+   }
+});
+
+
