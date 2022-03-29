@@ -6,6 +6,7 @@ use App\Events\UserTestEvent;
 use App\Events\UserBroadcastTestEvent;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Cache\RateLimiter;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +148,7 @@ Route::get('limiter', function () {
 // HTTP client
 Route::get('http-client', function () {
 
+    $response  = Http::get('http://laravel8study.cc/echo');
     // 具体使用请参考手册，这里只说重点
 
     // 1.输出内容
@@ -163,6 +165,10 @@ Route::get('http-client', function () {
 //    $response->header('X-RateLimit-Remaining') // string;
 //    $response->headers() // array;
     // 请求数据、请求头、认证、超时、重试、错误处理
+
+    Http::withOptions([
+        'debug' => true,
+    ])->get('');
 
     // 2.验证相关
     // 直接访问 https 时，可以手动设置路过，也可以手动添加 pem 证书
@@ -304,5 +310,4 @@ Route::get('user/profile', function () {
        return new \App\Http\Resources\UserResource(Auth::user());
    }
 });
-
 
