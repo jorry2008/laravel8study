@@ -24,9 +24,6 @@ class DbTest extends TestCase
 
         // 以上 make() 方法，只是用来生成测试数据，并返回对应的模型对象，不会入库，换成 create() 方法可实现持久化入库
 
-
-
-
         $this->assertTrue(true);
     }
 }
