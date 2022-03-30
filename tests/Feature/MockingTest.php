@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\TestJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class MockingTest extends TestCase
@@ -15,10 +17,11 @@ class MockingTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_mocking_example()
     {
-        $response = $this->get('/');
+        Queue::fake();
 
-        $response->assertStatus(200);
+        Queue::assertNotPushed(TestJob::class, 2);
+
     }
 }

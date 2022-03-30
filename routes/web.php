@@ -114,6 +114,19 @@ Route::get('notify', function () {
     return view('success');
 });
 
+// 一、普通队列说明
+Route::get('test/job', ['App\Http\Controllers\TestQueueController', 'testJob']);
+
+// 二、email队列发送说明
+Route::get('test/mail', ['App\Http\Controllers\TestQueueController', 'testEmail']);
+
+// 三、报表队列说明
+Route::get('test/report', ['App\Http\Controllers\TestQueueController', 'TestReport']);
+
+// 四、自动取消已放弃订单任务
+Route::get('test/order', ['App\Http\Controllers\TestQueueController', 'TestOrder']);
+
+
 // 发送邮件
 Route::get('test/mail', ['App\Http\Controllers\TestQueueController', 'testEmail']);
 Route::get('/mailable', function () { // 预览功能极其重要
