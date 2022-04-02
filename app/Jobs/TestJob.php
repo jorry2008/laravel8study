@@ -26,7 +26,7 @@ class TestJob implements ShouldQueue
     public $timeout = 60; // 超时，直接导致队列进程退出
 
     // 个性化设置，当前任务执行失败后，自动延迟执行的时间，同命令行 --delay 一样
-    public $delay = 5;
+//    public $delay = 5;
 
     // 个性化设置当前任务异常的最大次数（默认不限次数）
     public $maxExceptions = 3;
